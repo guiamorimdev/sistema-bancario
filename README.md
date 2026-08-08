@@ -30,5 +30,5 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 
 ```text
 src/
- ├── dados/          # Classes de domínio (Conta, ContaCorrente)
+ ├── dados/          # Classes de domínio (Conta, ContaCorrente, ContaPoupanca)
  └── Main.java       # Classe principal para testes e execução
