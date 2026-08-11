@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
         // classe usada para testes até o presente momento.
         ContaPoupanca p1 = new ContaPoupanca("Guilherme");
+        ContaCorrente c1 = new ContaCorrente("Guilherme");
         System.out.println(p1);
-        p1.renderJuros();
-        System.out.println(p1);
+        System.out.println(c1);
     }
 }
