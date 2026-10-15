@@ -31,4 +31,4 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 ```text
 src/
  ├── dados/          # Classes e Interface de domínio 
- └── Main.java       # Classe principal para testes e execução
+ └── TestesMain.java       # Classe principal para testes e execução
