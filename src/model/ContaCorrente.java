@@ -1,4 +1,4 @@
-package dados;
+package model;
 
 public class ContaCorrente extends Conta implements ContaInterface {
 

@@ -20,7 +20,7 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 - **Linguagem:** Java
 - **Controle de Versão:** Git e GitHub
 - **Conceitos de POO Aplicados:**
-  - **Encapsulamento:** Proteção de dados sensíveis da conta (`saldo`, `agencia`, `numero`).
+  - **Encapsulamento:** Proteção de model sensíveis da conta (`saldo`, `agencia`, `numero`).
   - **Interfaces e Polimorfismo:** Padronização dos comportamentos das contas bancárias.
   - **Tratamento de Regras de Negócio:** Validações de valores para depósito e saque.
 
@@ -30,5 +30,5 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 
 ```text
 src/
- ├── dados/          # Classes e Interface de domínio 
+ ├── model/          # Classes e Interface de domínio 
  └── TestesMain.java       # Classe principal para testes e execução
