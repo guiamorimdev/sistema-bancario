@@ -6,4 +6,11 @@ public interface ContaInterface {
     void transferir(double valor, Conta contaDestino);
     double getSaldo();
     void setSaldo(double saldo);
+    String getNumero();
+    void setNumero(String numero);
+    String getAgencia();
+    void setAgencia(String agencia);
+    String getCliente();
+    void setCliente(String cliente);
+
 }

@@ -56,7 +56,33 @@ public abstract class Conta implements ContaInterface {
         return this.saldo;
     }
 
+    @Override
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+
+    @Override
+    public String getNumero() {
+        return numero;
+    }
+    @Override
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+    @Override
+    public String getAgencia() {
+        return agencia;
+    }
+    @Override
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 }

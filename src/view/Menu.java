@@ -3,15 +3,18 @@ package view;
 import model.Conta;
 import model.ContaCorrente;
 import model.ContaPoupanca;
+import service.ContaService;
 
 import java.util.Scanner;
 
 public class Menu {
 
     private Scanner scanner;
+    private ContaService contaService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
+        this.contaService = new ContaService();
     }
 
     public void exibirMenu() {
@@ -64,15 +67,41 @@ public class Menu {
 
                     // Se a conta foi criada com sucesso, o próximo passo será salvá-la no seu ContaService!
                     if (novaConta != null) {
+                        contaService.adicionarConta(novaConta); // adiciona a conta recém criada na lista do ContaService
+
+                        System.out.println("\nConta criada com sucesso!");
                         System.out.println("Titular: " + nomeTitular);
-                        // Aqui você poderá chamar o seu service para guardar a `novaConta` em uma lista.
+                        System.out.println("Número da Conta: " + novaConta.getNumero());
+                        System.out.println("Agência: " + novaConta.getAgencia());
+                        System.out.printf("Saldo: " + novaConta.getSaldo());
                     }
                     break;
                 case 2:
                     System.out.println("Opção de depósito selecionada.");
                     break;
                 case 3:
-                    /**/
+                    System.out.println("\n--- CONSULTAR DADOS DA CONTA ---");
+                    System.out.println("Digite o número da conta: ");
+                    int numeroBusca = scanner.nextInt();
+
+                    Conta contaEncontrada = contaService.buscarConta(numeroBusca);
+
+                    if (contaEncontrada != null) {
+                        System.out.println("\n--- CONTA ENCONTRADA ---");
+                        System.out.println("Titular: " + contaEncontrada.getCliente());
+                        System.out.println("Número: " + contaEncontrada.getNumero());
+                        System.out.println("Agência: " + contaEncontrada.getAgencia());
+                        System.out.println("Saldo: " + contaEncontrada.getSaldo());
+
+                        if (contaEncontrada instanceof ContaCorrente) {
+                            System.out.printf("Tipo: Conta Corrente");
+                        } else if (contaEncontrada instanceof ContaPoupanca) {
+                            System.out.println("Tipo: Conta Poupança");
+                        } else {
+                            System.out.println("Nenhuma Conta Encontrada!");
+                        }
+                        break;
+                    }
                 case 4:
                     System.out.println("Opção de saque selecionada.");
                     break;
