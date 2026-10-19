@@ -30,5 +30,7 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 
 ```text
 src/
- ├── model/          # Classes e Interface de domínio 
- └── TestesMain.java       # Classe principal para testes e execução
+├── model/           # Classes de domínio (Conta, ContaCorrente, ContaInterface, ContaPoupanca)
+├── service/         # Lógica de negócio e gerenciamento (ContaService)
+├── view/            # Interface do console (Menu)
+└── TestesMain.java  # Classe principal para testes e execução

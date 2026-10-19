@@ -1,6 +1,7 @@
 # Configurações do IntelliJ IDEA
 .idea/
 *.iml
+target/
 
 ### IntelliJ IDEA ###
 out/

@@ -17,7 +17,7 @@ public class ContaService {
 
     public List<Conta> listarContas(){ return contas; }
 
-    public Conta buscarConta(int numero){
+    public Conta buscarConta(String numero){
         for (Conta conta : contas){
             if (conta.getNumero().equals(numero)){ return conta; }
         }

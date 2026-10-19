@@ -52,8 +52,8 @@ public abstract class Conta implements ContaInterface {
     }
 
     @Override
-    public double getSaldo() {
-        return this.saldo;
+    // uso o Math para mostrar o valor com duas casas decimais sem trocar o retorno do tipo double
+    public double getSaldo() { return Math.round(this.saldo * 100.0) / 100.0;
     }
 
     @Override
@@ -65,23 +65,28 @@ public abstract class Conta implements ContaInterface {
     public String getNumero() {
         return numero;
     }
+
     @Override
     public void setNumero(String numero) {
         this.numero = numero;
     }
+
     @Override
     public String getAgencia() {
         return agencia;
     }
+
     @Override
     public void setAgencia(String agencia) {
         this.agencia = agencia;
     }
 
+    @Override
     public String getCliente() {
         return cliente;
     }
 
+    @Override
     public void setCliente(String cliente) {
         this.cliente = cliente;
     }
