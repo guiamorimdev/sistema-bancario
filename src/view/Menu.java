@@ -9,8 +9,8 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private Scanner scanner;
-    private ContaService contaService;
+    private final Scanner scanner;
+    private final ContaService contaService;
 
     public Menu() {
         this.scanner = new Scanner(System.in);
@@ -27,7 +27,8 @@ public class Menu {
             System.out.println("3 - Consultar Dados da Conta");
             System.out.println("4 - Sacar");
             System.out.println("5 - Transferir");
-            System.out.println("6 - Avançar Ciclo (Poupança)");
+            System.out.println("6 - Render Juros (Poupança)");
+            System.out.println("7 - Simular Último Dia do Ciclo (Poupança)");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -73,7 +74,7 @@ public class Menu {
                         System.out.println("\nTitular: " + nomeTitular);
                         System.out.println("Número da Conta: " + novaConta.getNumero());
                         System.out.println("Agência: " + novaConta.getAgencia());
-                        System.out.printf("Saldo: " + novaConta.getSaldo() + "\n");
+                        System.out.print("Saldo: " + novaConta.getSaldo() + "\n");
                     }
                     break;
                 case 2:
@@ -114,10 +115,10 @@ public class Menu {
                         System.out.println("\nTitular: " + contaEncontrada.getCliente());
                         System.out.println("Número: " + contaEncontrada.getNumero());
                         System.out.println("Agência: " + contaEncontrada.getAgencia());
-                        System.out.printf("Saldo: " + contaEncontrada.getSaldo());
+                        System.out.print("Saldo: " + contaEncontrada.getSaldo());
 
                         if (contaEncontrada instanceof ContaCorrente) {
-                            System.out.printf("\nTipo: Conta Corrente\n");
+                            System.out.print("\nTipo: Conta Corrente\n");
                         } else {
                             System.out.println("\nTipo: Conta Poupança\n");
                         }
@@ -143,7 +144,7 @@ public class Menu {
                         System.out.println(mensagemRetorno);
 
                     } else {
-                        System.out.printf("\nConta Não Encontrada!");
+                        System.out.print("\nConta Não Encontrada!");
                     }
                     break;
                 case 5:
@@ -189,13 +190,54 @@ public class Menu {
 
                     break;
                 case 6:
-                    System.out.println("Avançando ciclo da poupança...");
+                    System.out.println("\n--- RENDIMENTO DE JUROS ---");
+
+                    // Limpa o buffer
+                    scanner.nextLine();
+
+                    System.out.print("Digite o Número da Sua Conta Poupança: ");
+                    String numeroConta = scanner.nextLine();
+
+                    Conta conta = contaService.buscarConta(numeroConta);
+
+                    if (conta != null) {
+                        if (conta instanceof ContaPoupanca poupanca) {
+                            String mensagemRetorno = poupanca.renderJuros();
+                            System.out.println("\n" + mensagemRetorno);
+                        } else {
+                            System.out.println("\nEsta Conta Não é do Tipo Poupança!");
+                        }
+                    } else {
+                        System.out.println("\nConta Não Encontrada!");
+                    }
+                    break;
+                case 7:
+                    System.out.println("\n--- ATALHO: AVANÇAR DIAS (SIMULAÇÃO)---");
+
+                    // Limpa o buffer
+                    scanner.nextLine();
+
+                    System.out.print("Digite o Número da Sua Conta Poupança: ");
+                    String numConta = scanner.nextLine();
+
+                    Conta c = contaService.buscarConta(numConta);
+
+                    if (c != null) {
+                        if (c instanceof ContaPoupanca p) {
+                            String msgRetorno = p.simularUltimoDia();
+                            System.out.println("\n" + msgRetorno);
+                        } else {
+                            System.out.println("\nEsta Conta Não é do Tipo Poupança");
+                        }
+                    } else {
+                        System.out.println("\nConta Não Encontrada!");
+                    }
                     break;
                 case 0:
-                    System.out.println("Saindo do sistema... Até logo!");
+                    System.out.println("\n--- SAINDO DO SISTEMA! ---");
                     break;
                 default:
-                    System.out.println("Opção inválida! Tente novamente.");
+                    System.out.println("\nOpção Inválida! Digite uma Opção Válida!");
             }
         }
     }
