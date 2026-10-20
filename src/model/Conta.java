@@ -39,16 +39,17 @@ public abstract class Conta implements ContaInterface {
     }
 
     @Override
-    public void transferir(double valor, Conta contaDestino) {
+    public String transferir(double valor, Conta contaDestino) {
         // verificação do valor da transferência
-        if (valor > this.getSaldo() || valor == 0){
-            System.out.println("O valor de transferência deve ser menor ou igual ao seu saldo");
-            return;
+        if (valor > this.getSaldo() || valor <= 0){
+            return "O valor de transferência deve ser menor ou igual ao seu saldo";
+        } else {
+            // caso passe na verificação, desconta da conta e realiza a transferência.
+            this.setSaldo(this.getSaldo() - valor);
+            contaDestino.depositar(valor);
+            return "Transferência Realizada com sucesso!\n" +
+                    "O Valor R$" + valor + " Já se Encontra na Conta de Destino.";
         }
-
-        // caso passe na verificação, desconta da conta e realiza a transferência.
-        this.setSaldo(this.getSaldo() - valor);
-        contaDestino.depositar(valor);
     }
 
     @Override

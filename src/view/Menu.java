@@ -82,7 +82,7 @@ public class Menu {
                     // Limpa o enter pendente deiaxdo pelo nextInt() do menu principal
                     scanner.nextLine();
 
-                    System.out.println("Digite o Número da Conta para Depósito: ");
+                    System.out.print("Digite o Número da Conta para Depósito: ");
                     String numeroContaDeposito = scanner.nextLine();
 
                     Conta contaDeposito = contaService.buscarConta(numeroContaDeposito);
@@ -104,7 +104,7 @@ public class Menu {
                     // Limpa o buffer
                     scanner.nextLine();
 
-                    System.out.println("Digite o Número da Conta: ");
+                    System.out.print("Digite o Número da Conta: ");
                     String numeroBusca = scanner.nextLine();
 
                     Conta contaEncontrada = contaService.buscarConta(numeroBusca);
@@ -129,7 +129,7 @@ public class Menu {
                     // Limpa o buffer
                     scanner.nextLine();
 
-                    System.out.println("Digite o Número da Conta: ");
+                    System.out.print("Digite o Número da Conta: ");
                     String numeroContaSaque = scanner.nextLine();
 
                     Conta contaSaque = contaService.buscarConta(numeroContaSaque);
@@ -147,7 +147,46 @@ public class Menu {
                     }
                     break;
                 case 5:
-                    System.out.println("Opção de transferência selecionada.");
+                    System.out.println("\n--- TRANSFERÊNCIA ---");
+
+                    // Limpa o buffer
+                    scanner.nextLine();
+
+                    System.out.print("Digite o Número da Conta: ");
+                    String numeroContaOrigem = scanner.nextLine();
+
+                    Conta contaOrigem =  contaService.buscarConta(numeroContaOrigem);
+
+                    // valida se a conta origem existe
+                    if (contaOrigem != null) {
+                        System.out.print("Digite o Número da Conta de Destino: ");
+                        String numeroContaDestino = scanner.nextLine();
+
+                        // evita que haja a transferência para a própria conta
+                        if (numeroContaOrigem.equals(numeroContaDestino)){
+                            System.out.println("\nNão é Possível Fazer uma Transferência para a Própria Conta!");
+                            break;
+                        }
+
+                        Conta contaDestino =  contaService.buscarConta(numeroContaDestino);
+
+                        // valida se a conta destino existe
+                        if (contaDestino != null) {
+                            System.out.print("Digite o Valor a Ser Transferido: R$");
+                            double valorOrigem = scanner.nextDouble();
+
+                            // executa a transf. e retorna a mensagem
+                            String mensagemRetorno = contaOrigem.transferir(valorOrigem, contaDestino);
+                            System.out.println(mensagemRetorno);
+
+                        } else {
+                            System.out.println("\nConta de Destino Não Encontrada!");
+                        }
+
+                    } else {
+                        System.out.println("\nConta de Origem Não Encontrada!");
+                    }
+
                     break;
                 case 6:
                     System.out.println("Avançando ciclo da poupança...");
