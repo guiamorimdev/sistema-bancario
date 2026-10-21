@@ -35,10 +35,15 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 
 ```text
 src/
-├── model/           # Classes de domínio (Conta, ContaCorrente, ContaInterface, ContaPoupanca)
-├── service/         # Lógica de negócio e gerenciamento (ContaService)
-├── view/            # Interface do console (Menu)
-└── TestesMain.java  # Classe principal para testes e execução
+├── main/
+│   └── java/
+│       ├── exception/  # Classes de exceções personalizadas
+│       ├── model/      # Classes de domínio (Conta, ContaCorrente, ContaPoupanca, ContaInterface)
+│       ├── service/    # Lógica de negócio e gerenciamento (ContaService)
+│       ├── view/       # Interface do console (Menu)
+│       └── Main.java   # Classe principal para execução
+└── test/
+    └── java/           # Estrutura preparada para testes unitários
 ```
 
 ---
@@ -62,27 +67,27 @@ cd sistema-bancario
 1. Abra a IDE e selecione **Open / Import Project**.
 2. Navegue até a pasta onde clonou o projeto e abra-a.
 3. Aguarde a IDE terminar de indexar o projeto.
-4. Localize o arquivo `src/TestesMain.java`.
-5. Clique com o botão direito nele e selecione **Run 'TestesMain.main()'** (ou pressione `Shift + F10` no IntelliJ).
+4. Localize o arquivo `src/main/java/Main.java`.
+5. Clique com o botão direito nele e selecione **Run 'Main.main()'** (ou pressione `Shift + F10` no IntelliJ).
 
 ### 3. Executar pelo terminal
 
 1. Entre na pasta de código-fonte:
 
 ```bash
-   cd src
+   cd src/main/java
 ```
 
 2. Compile as classes:
 
 ```bash
-   javac model/*.java service/*.java view/*.java TestesMain.java
+   javac exception/*.java model/*.java service/*.java view/*.java Main.java
 ```
 
 3. Execute o programa:
 
 ```bash
-   java TestesMain
+   java Main
 ```
 
 ---
@@ -117,11 +122,10 @@ Escolha uma opção:
 
 ## 🔮 Próximos Passos
 
+- [x] Exceções customizadas para validações de regras de negócio
+- [ ] Testes unitários com JUnit 5
+- [ ] Histórico de transações (extrato bancário)
 - [ ] Persistência de dados em arquivo ou banco de dados
-- [ ] Testes unitários (JUnit)
-- [ ] Exceções customizadas para as regras de negócio
-- [ ] Histórico de transações (extrato)
-
 ---
 
 ## 👨‍💻 Autor
