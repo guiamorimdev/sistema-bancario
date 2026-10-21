@@ -155,109 +155,92 @@ public class Menu {
 
                     Conta contaSaque = contaService.buscarConta(numeroContaSaque);
 
-                    if (contaSaque != null) {
+                    try {
                         System.out.print("Digite o Valor a Ser Sacado: R$");
                         double valorSaque = scanner.nextDouble();
 
-                        // captura e exibe a mensagem do método sacar
-                        try {
-                            String mensagemRetorno = contaSaque.sacar(valorSaque);
-                            System.out.println(mensagemRetorno);
-                        } catch (exception.SaldoInsuficienteException e) {
-                            System.out.println(e.getMessage());
-                        }
+                        String mensagemRetorno = contaSaque.sacar(valorSaque);
+                        System.out.println(mensagemRetorno);
 
-                    } else {
-                        System.out.print("\nConta Não Encontrada!");
+                    } catch (exception.ContaNaoEncontradaException | exception.SaldoInsuficienteException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 5:
                     System.out.println("\n--- TRANSFERÊNCIA ---");
-
-                    // Limpa o buffer
                     scanner.nextLine();
 
-                    System.out.print("Digite o Número da Conta: ");
+                    System.out.print("Digite o Número da Conta de Origem: ");
                     String numeroContaOrigem = scanner.nextLine();
 
-                    Conta contaOrigem =  contaService.buscarConta(numeroContaOrigem);
+                    System.out.print("Digite o Número da Conta de Destino: ");
+                    String numeroContaDestino = scanner.nextLine();
 
-                    // valida se a conta origem existe
-                    if (contaOrigem != null) {
-                        System.out.print("Digite o Número da Conta de Destino: ");
-                        String numeroContaDestino = scanner.nextLine();
-
-                        // evita que haja a transferência para a própria conta
-                        if (numeroContaOrigem.equals(numeroContaDestino)){
-                            System.out.println("\nNão é Possível Fazer uma Transferência para a Própria Conta!");
-                            break;
-                        }
-
-                        Conta contaDestino =  contaService.buscarConta(numeroContaDestino);
-
-                        // valida se a conta destino existe
-                        if (contaDestino != null) {
-                            System.out.print("Digite o Valor a Ser Transferido: R$");
-                            double valorOrigem = scanner.nextDouble();
-
-                            // executa a transf. e retorna a mensagem
-                            try {
-                                String mensagemRetorno = contaOrigem.transferir(valorOrigem, contaDestino);
-                                System.out.println(mensagemRetorno);
-                            } catch (exception.SaldoInsuficienteException e) {
-                                System.out.println(e.getMessage());
-                            }
-                        } else {
-                            System.out.println("\nConta de Destino Não Encontrada!");
-                        }
-
-                    } else {
-                        System.out.println("\nConta de Origem Não Encontrada!");
+                    // Evita transferência para a mesma conta
+                    if (numeroContaOrigem.equals(numeroContaDestino)) {
+                        System.out.println("\nNão é Possível Fazer uma Transferência para a Própria Conta!");
+                        break;
                     }
 
+                    try {
+                        // Busca ambas as contas (se alguma não existir, lança ContaNaoEncontradaException)
+                        Conta contaOrigem = contaService.buscarConta(numeroContaOrigem);
+                        Conta contaDestino = contaService.buscarConta(numeroContaDestino);
+
+                        System.out.print("Digite o Valor a Ser Transferido: R$");
+                        double valorOrigem = scanner.nextDouble();
+
+                        String mensagemRetorno = contaOrigem.transferir(valorOrigem, contaDestino);
+                        System.out.println(mensagemRetorno);
+
+                    } catch (exception.ContaNaoEncontradaException | exception.SaldoInsuficienteException | exception.ValorInvalidoException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case 6:
                     System.out.println("\n--- RENDIMENTO DE JUROS ---");
-
-                    // Limpa o buffer
                     scanner.nextLine();
 
                     System.out.print("Digite o Número da Sua Conta Poupança: ");
                     String numeroConta = scanner.nextLine();
 
-                    Conta conta = contaService.buscarConta(numeroConta);
+                    try {
+                        // Se a conta não existir, ContaNaoEncontradaException
+                        Conta conta = contaService.buscarConta(numeroConta);
 
-                    if (conta != null) {
-                        if (conta instanceof ContaPoupanca poupanca) {
-                            String mensagemRetorno = poupanca.renderJuros();
-                            System.out.println("\n" + mensagemRetorno);
-                        } else {
-                            System.out.println("\nEsta Conta Não é do Tipo Poupança!");
+                        // Verifica se é uma Conta Poupança
+                        if (!(conta instanceof ContaPoupanca)) {
+                            throw new IllegalArgumentException("\nEsta Conta Não é do Tipo Poupança!");
                         }
-                    } else {
-                        System.out.println("\nConta Não Encontrada!");
+
+                        ContaPoupanca poupanca = (ContaPoupanca) conta;
+                        String mensagemRetorno = poupanca.renderJuros();
+                        System.out.println("\n" + mensagemRetorno);
+
+                    } catch (exception.ContaNaoEncontradaException | IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 7:
-                    System.out.println("\n--- ATALHO: AVANÇAR DIAS (SIMULAÇÃO)---");
-
-                    // Limpa o buffer
+                    System.out.println("\n--- ATALHO: AVANÇAR DIAS (SIMULAÇÃO) ---");
                     scanner.nextLine();
 
                     System.out.print("Digite o Número da Sua Conta Poupança: ");
                     String numConta = scanner.nextLine();
 
-                    Conta c = contaService.buscarConta(numConta);
+                    try {
+                        Conta c = contaService.buscarConta(numConta);
 
-                    if (c != null) {
-                        if (c instanceof ContaPoupanca p) {
-                            String msgRetorno = p.simularUltimoDia();
-                            System.out.println("\n" + msgRetorno);
-                        } else {
-                            System.out.println("\nEsta Conta Não é do Tipo Poupança");
+                        if (!(c instanceof ContaPoupanca)) {
+                            throw new IllegalArgumentException("\nEsta Conta Não é do Tipo Poupança!");
                         }
-                    } else {
-                        System.out.println("\nConta Não Encontrada!");
+
+                        ContaPoupanca p = (ContaPoupanca) c;
+                        String msgRetorno = p.simularUltimoDia();
+                        System.out.println("\n" + msgRetorno);
+
+                    } catch (exception.ContaNaoEncontradaException | IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 0:
