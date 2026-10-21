@@ -1,5 +1,9 @@
 package view;
 
+import exception.ContaNaoEncontradaException;
+import exception.SaldoInsuficienteException;
+import exception.TipoContaInvalidoException;
+import exception.ValorInvalidoException;
 import model.Conta;
 import model.ContaCorrente;
 import model.ContaPoupanca;
@@ -42,6 +46,14 @@ public class Menu {
                     scanner.nextLine();
                     String nomeTitular = scanner.nextLine();
 
+                    try {
+                        Conta.validarNomeTitular(nomeTitular);
+                    } catch(exception.NomeTitularInvalidoException e) {
+                        System.out.println(e.getMessage());
+                        System.out.println("Operação de Criação de Conta Cancelada!");
+                        break;
+                    }
+
                     // Pergunta o tipo de conta
                     System.out.println("Escolha o Tipo de Conta:");
                     System.out.println("1 - Conta Corrente (Saldo inicial: R$ 0.0)");
@@ -52,20 +64,24 @@ public class Menu {
                     // Variável genérica do tipo Conta para guardar a nova conta instanciada
                     Conta novaConta = null;
 
-                    if (tipoConta == 1) {
-                        // Instancia a Conta Corrente
-                        novaConta = new ContaCorrente(nomeTitular);
-                        System.out.println("Conta Corrente Criada com Sucesso!");
+                    try {
+                        if (tipoConta == 1) {
+                            // Instancia a Conta Corrente
+                            novaConta = new ContaCorrente(nomeTitular);
+                            System.out.println("Conta Corrente Criada com Sucesso!");
 
-                    } else if (tipoConta == 2) {
-                        // Instancia a Conta Poupança (com saldo inicial de 50.0 definido automaticamente)
-                        novaConta = new ContaPoupanca(nomeTitular);
-                        System.out.println("Conta Poupança Criada com Sucesso!");
+                        } else if (tipoConta == 2) {
+                            // Instancia a Conta Poupança (com saldo inicial de 50.0 definido automaticamente)
+                            novaConta = new ContaPoupanca(nomeTitular);
+                            System.out.println("Conta Poupança Criada com Sucesso!");
 
-                    } else {
-                        System.out.println("Tipo de Conta Inválido! Operação Cancelada.");
+                        } else {
+                            System.out.println("Tipo de Conta Inválido! Operação Cancelada.");
+                        }
+                    } catch (TipoContaInvalidoException e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Operação de Criação de Conta Cancelada!");
                     }
-
                     // Se a conta foi criada com sucesso, o próximo passo será salvá-la no seu ContaService!
                     if (novaConta != null) {
                         contaService.adicionarConta(novaConta); // adiciona a conta recém criada na lista do ContaService
@@ -86,17 +102,17 @@ public class Menu {
                     System.out.print("Digite o Número da Conta para Depósito: ");
                     String numeroContaDeposito = scanner.nextLine();
 
-                    Conta contaDeposito = contaService.buscarConta(numeroContaDeposito);
+                    try {
+                        Conta contaDeposito = contaService.buscarConta(numeroContaDeposito);
 
-                    if (contaDeposito != null) {
                         System.out.print("Digite o Valor a Ser Depositado: R$");
                         double valorDeposito = scanner.nextDouble();
 
                         String mensagemRetorno = contaDeposito.depositar(valorDeposito);
-
                         System.out.println(mensagemRetorno);
-                    } else {
-                        System.out.println("\nConta Não Encontrada!");
+
+                    } catch (ContaNaoEncontradaException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case 3:
@@ -108,22 +124,26 @@ public class Menu {
                     System.out.print("Digite o Número da Conta: ");
                     String numeroBusca = scanner.nextLine();
 
-                    Conta contaEncontrada = contaService.buscarConta(numeroBusca);
+                    try {
+                        Conta contaEncontrada = contaService.buscarConta(numeroBusca);
 
-                    if (contaEncontrada != null) {
-                        System.out.println("\n--- CONTA ENCONTRADA ---");
-                        System.out.println("\nTitular: " + contaEncontrada.getCliente());
-                        System.out.println("Número: " + contaEncontrada.getNumero());
-                        System.out.println("Agência: " + contaEncontrada.getAgencia());
-                        System.out.print("Saldo: " + contaEncontrada.getSaldo());
+                            System.out.println("\n--- CONTA ENCONTRADA ---");
+                            System.out.println("\nTitular: " + contaEncontrada.getCliente());
+                            System.out.println("Número: " + contaEncontrada.getNumero());
+                            System.out.println("Agência: " + contaEncontrada.getAgencia());
+                            System.out.print("Saldo: " + contaEncontrada.getSaldo());
 
-                        if (contaEncontrada instanceof ContaCorrente) {
-                            System.out.print("\nTipo: Conta Corrente\n");
-                        } else {
-                            System.out.println("\nTipo: Conta Poupança\n");
-                        }
-                        break;
+                            if (contaEncontrada instanceof ContaCorrente) {
+                                System.out.print("\nTipo: Conta Corrente\n");
+                            } else {
+                                System.out.println("\nTipo: Conta Poupança\n");
+                            }
+
+                    } catch (ContaNaoEncontradaException e) {
+                            System.out.println(e.getMessage());
+
                     }
+                    break;
                 case 4:
                     System.out.println("\n--- SAQUE ---");
 
@@ -140,8 +160,12 @@ public class Menu {
                         double valorSaque = scanner.nextDouble();
 
                         // captura e exibe a mensagem do método sacar
-                        String mensagemRetorno = contaSaque.sacar(valorSaque);
-                        System.out.println(mensagemRetorno);
+                        try {
+                            String mensagemRetorno = contaSaque.sacar(valorSaque);
+                            System.out.println(mensagemRetorno);
+                        } catch (exception.SaldoInsuficienteException e) {
+                            System.out.println(e.getMessage());
+                        }
 
                     } else {
                         System.out.print("\nConta Não Encontrada!");
@@ -177,9 +201,12 @@ public class Menu {
                             double valorOrigem = scanner.nextDouble();
 
                             // executa a transf. e retorna a mensagem
-                            String mensagemRetorno = contaOrigem.transferir(valorOrigem, contaDestino);
-                            System.out.println(mensagemRetorno);
-
+                            try {
+                                String mensagemRetorno = contaOrigem.transferir(valorOrigem, contaDestino);
+                                System.out.println(mensagemRetorno);
+                            } catch (exception.SaldoInsuficienteException e) {
+                                System.out.println(e.getMessage());
+                            }
                         } else {
                             System.out.println("\nConta de Destino Não Encontrada!");
                         }

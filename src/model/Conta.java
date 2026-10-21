@@ -19,7 +19,7 @@ public abstract class Conta implements ContaInterface {
     @Override
     public String depositar(double valor) {
         if (valor <= 0) {
-            return "\nImpossível depositar um valor menor ou igual a zero (R$0,00)";
+            throw new exception.ValorInvalidoException("\nImpossível Depositar um Valor Menor ou Igual a Zero (R$0,00)");
         } else {
             this.saldo += valor;
             return String.format("\nDepositado com sucesso!\nO valor de R$%.2f já se encontra presente na sua conta.\nSaldo Atual: R$%.2f", valor , this.saldo);
@@ -31,7 +31,9 @@ public abstract class Conta implements ContaInterface {
         if (valor <= 0) {
             return "\nImpossível sacar um valor menor ou igual a zero (R$0,00)";
         } else if (valor > saldo) {
-            return String.format("\nImpossível sacar um valor maior que o saldo da conta. \nSaldo Atual: R$%.2f", this.saldo);
+            throw new exception.SaldoInsuficienteException(
+                    String.format("\nImpossível Sacar um Valor Maior que o Saldo da Sua Conta! \nSaldo Atual: R$%.2f", this.saldo)
+            );
         } else {
             this.saldo -= valor;
             return String.format("\nSaque realizado com sucesso!\nO valor de R$%.2f foi sacado da sua conta.\nSaldo Atual: R$%.2f", valor , this.saldo);
@@ -49,6 +51,16 @@ public abstract class Conta implements ContaInterface {
             contaDestino.depositar(valor);
             return "Transferência Realizada com sucesso!\n" +
                     "O Valor R$" + valor + " Já se Encontra na Conta de Destino.";
+        }
+    }
+
+    public static void validarNomeTitular(String nome){
+        if (nome == null || nome.trim().isEmpty()){
+            throw new exception.NomeTitularInvalidoException("\nErro: O Nome do Titular Não Pode Estar Vazio!");
+        }
+
+        if (nome.matches(".*\\d.*")){
+            throw new exception.NomeTitularInvalidoException("\nErro: O Nome do Titular Não Pode Conter Números!");
         }
     }
 

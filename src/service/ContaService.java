@@ -21,6 +21,6 @@ public class ContaService {
         for (Conta conta : contas){
             if (conta.getNumero().equals(numero)){ return conta; }
         }
-        return null;
+        throw new exception.ContaNaoEncontradaException("\nErro: Conta com o Número " + numero + " Não Foi Encontrada!");
     }
 }
