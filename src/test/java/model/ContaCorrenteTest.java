@@ -55,4 +55,14 @@ public class ContaCorrenteTest {
         assertEquals(150.0, origem.getSaldo(), 0.001);
         assertEquals(50.0, destino.getSaldo(), 0.001);
     }
+
+    @Test
+    public void deveRegistrarTransacaoNoHIstoricoAposDepositoESaque(){
+        ContaCorrente conta = new ContaCorrente("Guilherme");
+
+        conta.depositar(100.0);
+        conta.sacar(30);
+
+        assertEquals(2, conta.getHistorico().size());
+    }
 }

@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public abstract class Conta implements ContaInterface {
@@ -7,6 +9,7 @@ public abstract class Conta implements ContaInterface {
     protected String numero;
     protected String agencia;
     protected double saldo;
+    protected List<Transacao> historico = new ArrayList<>();
 
     public Conta (String cliente){
         Random random = new Random();
@@ -22,6 +25,9 @@ public abstract class Conta implements ContaInterface {
             throw new exception.ValorInvalidoException("\nImpossível Depositar um Valor Menor ou Igual a Zero (R$0,00)");
         } else {
             this.saldo += valor;
+
+            this.historico.add(new Transacao("DEPÓSITO", valor));
+
             return String.format("\nDepositado com sucesso!\nO valor de R$%.2f já se encontra presente na sua conta.\nSaldo Atual: R$%.2f", valor , this.saldo);
         }
     }
@@ -36,21 +42,25 @@ public abstract class Conta implements ContaInterface {
             );
         } else {
             this.saldo -= valor;
+
+            this.historico.add(new Transacao("SAQUE", valor));
+
             return String.format("\nSaque realizado com sucesso!\nO valor de R$%.2f foi sacado da sua conta.\nSaldo Atual: R$%.2f", valor , this.saldo);
         }
     }
 
     @Override
     public String transferir(double valor, Conta contaDestino) {
-        // verificação do valor da transferência
-        if (valor > this.getSaldo() || valor <= 0){
-            return "O valor de transferência deve ser menor ou igual ao seu saldo";
+        if (valor > this.getSaldo() || valor <= 0) {
+            return "O Valor de Transferência Deve Ser Menor ou Igual ao Seu Saldo";
         } else {
-            // caso passe na verificação, desconta da conta e realiza a transferência.
-            this.setSaldo(this.getSaldo() - valor);
-            contaDestino.depositar(valor);
-            return "Transferência Realizada com sucesso!\n" +
-                    "O Valor R$" + valor + " Já se Encontra na Conta de Destino.";
+            this.saldo -= valor;
+            this.historico.add(new Transacao("TRANSFERÊNCIA ENVIADA", valor));
+
+            contaDestino.saldo += valor;
+            contaDestino.historico.add(new Transacao("TRANSFERÊNCIA RECEBIDA", valor));
+
+            return "\nTransferência Realizada com sucesso!\nO Valor R$" + valor + " Já se Encontra na Conta de Destino.";
         }
     }
 
@@ -61,6 +71,16 @@ public abstract class Conta implements ContaInterface {
 
         if (nome.matches(".*\\d.*")){
             throw new exception.NomeTitularInvalidoException("\nErro: O Nome do Titular Não Pode Conter Números!");
+        }
+    }
+
+    public void exibirExtrato(){
+        if (historico.isEmpty()){
+            System.out.println("Nenhuma Transação Realizada Ainda.");
+        } else {
+            for (Transacao t : historico) {
+                System.out.println(t);
+            }
         }
     }
 
@@ -102,5 +122,13 @@ public abstract class Conta implements ContaInterface {
     @Override
     public void setCliente(String cliente) {
         this.cliente = cliente;
+    }
+
+    public List<Transacao> getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(List<Transacao> historico) {
+        this.historico = historico;
     }
 }

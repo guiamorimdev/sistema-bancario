@@ -33,6 +33,7 @@ public class Menu {
             System.out.println("5 - Transferir");
             System.out.println("6 - Render Juros (Poupança)");
             System.out.println("7 - Simular Último Dia do Ciclo (Poupança)");
+            System.out.println("8 - Exibir Extrato Bancário");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -240,6 +241,21 @@ public class Menu {
                         System.out.println("\n" + msgRetorno);
 
                     } catch (exception.ContaNaoEncontradaException | IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 8:
+                    System.out.println("\n--- EXTRATO BANCÁRIO ---");
+                    scanner.nextLine(); // Limpa o buffer
+
+                    System.out.print("Digite o Número da Conta: ");
+                    String numeroContaExtrato = scanner.nextLine();
+
+                    try {
+                        Conta contaExtrato = contaService.buscarConta(numeroContaExtrato);
+                        contaExtrato.exibirExtrato();
+
+                    } catch (ContaNaoEncontradaException e) {
                         System.out.println(e.getMessage());
                     }
                     break;

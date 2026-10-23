@@ -123,8 +123,8 @@ Escolha uma opção:
 ## 🔮 Próximos Passos
 
 - [x] Exceções customizadas para validações de regras de negócio
-- [X] Testes unitários com JUnit 5
-- [ ] Histórico de transações (extrato bancário)
+- [x] Testes unitários com JUnit 5
+- [x] Histórico de transações (extrato bancário)
 - [ ] Persistência de dados em arquivo ou banco de dados
 ---
 
