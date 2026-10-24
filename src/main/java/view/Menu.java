@@ -260,6 +260,7 @@ public class Menu {
                     }
                     break;
                 case 0:
+                    contaService.salvarDados();
                     System.out.println("\n--- SAINDO DO SISTEMA! ---");
                     break;
                 default:

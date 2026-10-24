@@ -8,6 +8,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .kotlin
+conta.json
 
 ### Eclipse ###
 .apt_generated
