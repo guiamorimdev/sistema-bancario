@@ -17,17 +17,20 @@ Um sistema de gerenciamento bancário desenvolvido em Java, focado na aplicaçã
 - **Conta Poupança**
   - Rendimento de juros de 5% por ciclo
   - Simulação do último dia do ciclo (30º dia) para testes
+- **Persistência de Dados e Extrato**
+  - Salvamento e carregamento automático de contas em arquivo JSON (`contas.json`)
+  - Registro temporal e exibição de extrato bancário com histórico de transações
 
 ---
 
 ## 🛠️ Tecnologias e Conceitos
 
-- **Linguagem:** Java
+- **Linguagem:** Java 17
+- **Gerenciador de Dependências e Build:** Apache Maven
 - **Controle de versão:** Git e GitHub
-- **Conceitos de POO aplicados:**
-  - **Encapsulamento:** proteção dos dados sensíveis da conta (`saldo`, `agencia`, `numero`)
-  - **Interfaces e Polimorfismo:** padronização dos comportamentos das contas bancárias
-  - **Regras de negócio:** validações de valores para depósito e saque
+- **Persistência / Serialização:** Google Gson
+- **Testes Unitários:** JUnit 5
+- **Conceitos de POO:** Encapsulamento, Polimorfismo, Classes Abstratas, Exceções Personalizadas e TypeAdapters customizados
 
 ---
 
@@ -40,6 +43,7 @@ src/
 │       ├── exception/  # Classes de exceções personalizadas
 │       ├── model/      # Classes de domínio (Conta, ContaCorrente, ContaPoupanca, ContaInterface)
 │       ├── service/    # Lógica de negócio e gerenciamento (ContaService)
+│       ├── util/       # Adaptadores para serialização JSON
 │       ├── view/       # Interface do console (Menu)
 │       └── Main.java   # Classe principal para execução
 └── test/
@@ -52,7 +56,8 @@ src/
 
 ### Pré-requisitos
 
-- Java JDK 17 ou superior (recomendado)
+- Java JDK 17
+- Apache Maven
 - Git
 
 ### 1. Clonar o repositório
@@ -72,25 +77,14 @@ cd sistema-bancario
 
 ### 3. Executar pelo terminal
 
-1. Entre na pasta de código-fonte:
+1. Compile e construa o projeto:
+   `mvn clean compile`
 
-```bash
-   cd src/main/java
-```
+2. Execute os testes unitários:
+   `mvn test`
 
-2. Compile as classes:
-
-```bash
-   javac exception/*.java model/*.java service/*.java view/*.java Main.java
-```
-
-3. Execute o programa:
-
-```bash
-   java Main
-```
-
----
+3. Execute a aplicação:
+   `mvn exec:java -Dexec.mainClass="Main"`
 
 ## 📋 Como Usar
 
@@ -105,6 +99,7 @@ Ao iniciar a aplicação, você verá o menu interativo:
 5 - Transferir
 6 - Render Juros (Poupança)
 7 - Simular Último Dia do Ciclo (Poupança)
+8 - Exibir Extrato Bancário
 0 - Sair
 Escolha uma opção:
 ```
@@ -125,7 +120,7 @@ Escolha uma opção:
 - [x] Exceções customizadas para validações de regras de negócio
 - [x] Testes unitários com JUnit 5
 - [x] Histórico de transações (extrato bancário)
-- [ ] Persistência de dados em arquivo ou banco de dados
+- [x] Persistência de dados em arquivo ou banco de dados
 ---
 
 ## 👨‍💻 Autor
